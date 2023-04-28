@@ -7,10 +7,10 @@
 
 import UIKit
 
-fileprivate let OS = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
-fileprivate let name = UIDevice.modelName
+internal let OS = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
+internal let name = UIDevice.modelName
 
-struct MetaData {
+public struct MetaData {
     let osVersion: String
     let deviceName: String
     let appVersion: String?
