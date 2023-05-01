@@ -9,7 +9,7 @@ import SwiftUI
 import SlackFeedback
 
 struct ContentView: View {
-    let networkService = NetworkService()
+    let slackService = SlackFeedback(configuration: Configuration())
     @State private var feedback = ""
 
     var body: some View {
@@ -30,7 +30,9 @@ struct ContentView: View {
 
     private func checkAndSendFeedback() {
         guard !feedback.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-        networkService.sendFeedback(feedback)
+        Task {
+            let _ = try? await slackService.sendFeedback(feedback)
+        }
     }
 }
 

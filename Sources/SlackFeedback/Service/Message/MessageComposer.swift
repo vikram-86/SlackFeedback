@@ -13,8 +13,6 @@ public protocol MessageComposable {
 }
 
 public class MessageComposer: MessageComposable {
-
-
     private(set) var metaData: MetaData
 
     public init() {
