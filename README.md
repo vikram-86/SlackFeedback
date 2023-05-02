@@ -48,7 +48,7 @@ slackFeedback.sendFeedback(feedback: feedback)
 The result of the feedback sent using SlackFeedback will appear in your designated Slack channel as a message with the following format:
 For example:
 
-![SlackFeedback Result](Skjermbilde 2023-05-02 kl. 11.47.51)
+<img width="463" alt="Skjermbilde 2023-05-02 kl  11 47 51" src="https://user-images.githubusercontent.com/11430094/235636276-f6e9ddff-3847-431c-af98-a8efa031e91c.png">
 
 ## Demo App
 
