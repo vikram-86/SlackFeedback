@@ -7,24 +7,37 @@
 
 import Foundation
 
+/// Protocol mainly responsible to compse the message that
+/// are to be sent to Slack
+/// Uses meta data to compose the info header
 public protocol MessageComposable {
-    func setMetaData(_ metaData: MetaData)
+    var metaData: MetaData { get }
+
+    /// Composes message according to Slack API
+    /// - Parameters:
+    ///   - feedback: main message that is to be displayed as a message on slack
+    ///   - userID: user id for the user example firebase Id
+    ///   - email: user's email so that they can be contacted
+    /// - Returns: ``Feedback``
     func createSlackMessage(fromFeedback feedback: String, userID: String?, feedbackMail email: String?) -> Feedback
 }
 
+/// Default MessageComposer
 public class MessageComposer: MessageComposable {
-    private(set) var metaData: MetaData
+    public let metaData: MetaData
 
-    public init() {
-        self.metaData = .default
+    public init(metaData: MetaData = .default) {
+        self.metaData = metaData
     }
 }
 
 public extension MessageComposer {
-    func setMetaData(_ metaData: MetaData) {
-        self.metaData = metaData
-    }
-
+    /// Composes message according to Slack API
+    /// - Parameters:
+    ///   - feedback: main message that is to be displayed as a message on slack
+    ///   - userID: user id for the user example firebase Id
+    ///   - email: user's email so that they can be contacted
+    /// - Returns: ``Feedback``
     func createSlackMessage(
         fromFeedback feedback: String,
         userID: String? = nil,

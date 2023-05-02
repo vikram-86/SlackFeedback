@@ -1,37 +1,37 @@
 import Foundation
 
+/// Responsible for sending feedback back to Slack
 public struct SlackFeedback {
-    private let configuration: Configuration
+    private let configuration: SlackConfigurationProtocol
 
-    public init(configuration: Configuration) {
+    public init(configuration: SlackConfigurationProtocol) {
         self.configuration = configuration
     }
 
+    /// Converts plain text to Slack format
+    /// and sends the feeback to slack using the webhook
+    /// provided in ``SlackConfigurationProtocol``
+    /// *This function is async, and can throw look at ``SlackError``*
+    /// - Parameters:
+    ///   - feedback: message to be sent to slack
+    ///   - userId: User id of the user sending the feedback, useful if you want to look up in a database
+    ///   - email: Email of the user sending the feedback, if they want to be contacted by mail
+    public func sendFeedback(
+        _ feedback: String,
+        userId: String? = nil,
+        feedbackEmail email: String? = nil
+    ) async throws {
+        let feedback = configuration.composeFeedback(feedback)
+        guard let request = configuration.createRequestFrom(feedback) else {
+            throw SlackError.couldNotCreateMessage
+        }
 
-    public func sendFeedback(_ message: String, userId: String? = nil, feedbackEmail email: String? = nil ) async {
+        let (_, response) = try await URLSession.shared.data(for: request)
 
-        let composedMessage = configuration.messageComposer.createSlackMessage(fromFeedback: message)
-
-        guard let messageData = try? JSONEncoder().encode(composedMessage) else { return }
-        guard let url = URL(string: configuration.baseURLString) else { return }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = messageData
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        do {
-            let (_, response) = try await URLSession.shared.data(for: request)
-            guard
-                let httpResponse = response as? HTTPURLResponse,
-                httpResponse.statusCode == 200 else {
-                print("Status not 200.. something went wrong")
-                return
-            }
-
-            print("Meessage sent!")
-        } catch {
-            print(error)
+        guard
+            let httpResponse = response as? HTTPURLResponse,
+            200..<300 ~= httpResponse.statusCode else {
+            throw SlackError.couldNotSendMessage
         }
     }
 }

@@ -9,29 +9,50 @@ import SwiftUI
 import SlackFeedback
 
 struct ContentView: View {
-    let slackService = SlackFeedback(configuration: Configuration())
+
     @State private var feedback = ""
+    @State private var webhook = ""
 
     var body: some View {
         VStack {
+            Spacer()
+            VStack {
+                Text("Insert Webhook for Slack")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                TextField("Webhook", text: $webhook)
+                    .textFieldStyle(.roundedBorder)
+            }
+            Spacer()
+
             TextField("Enter Feedback", text: $feedback)
                 .textFieldStyle(.roundedBorder)
-                .padding()
+
             Button {
                 checkAndSendFeedback()
             } label: {
                 Text("Send feedback")
             }
             .buttonStyle(.borderedProminent)
-
+            Spacer()
         }
+        .padding()
         .padding()
     }
 
     private func checkAndSendFeedback() {
+        guard !webhook.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
         guard !feedback.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+
+        let config = SlackConfiguration(webhook: webhook)
+        let slackFeedback = SlackFeedback(configuration: config)
+
         Task {
-            let _ = try? await slackService.sendFeedback(feedback)
+            do {
+                let _ = try await slackFeedback.sendFeedback(feedback)
+                print("Message sent")
+            } catch {
+                print("Error: \(error)")
+            }
         }
     }
 }

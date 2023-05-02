@@ -10,6 +10,10 @@ import UIKit
 internal let OS = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
 internal let name = UIDevice.modelName
 
+/// Contains meta data for info headers such as osVersion
+/// device name and appversion.
+/// the **default** value of metadata
+/// gets the osVersion and device name automatically
 public struct MetaData {
     let osVersion: String
     let deviceName: String
@@ -25,7 +29,9 @@ public struct MetaData {
         self.appVersion = appVersion
     }
 
-    static var `default`: MetaData {
+    /// default value gets the osVersion(iOS 16 etc)
+    /// and deviceName(iphone 14 Pro) automatically
+    public static var `default`: MetaData {
         MetaData()
     }
 }

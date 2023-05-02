@@ -7,12 +7,46 @@
 
 import Foundation
 
-public struct Configuration {
-    let baseURLString = "https://hooks.slack.com/services/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"
-    let messageComposer = MessageComposer()
-    let networkServie = NetworkService()
-
-    public init() {}
+public protocol SlackConfigurationProtocol {
+    var webhook: String { get }
+    var composer: MessageComposable { get }
 }
 
-public extension Configuration {}
+internal extension SlackConfigurationProtocol {
+    func composeFeedback(
+        _ message: String,
+        userId: String? = nil,
+        feebackEmail email: String? = nil
+    ) -> Feedback {
+        composer.createSlackMessage(
+            fromFeedback: message,
+            userID: userId,
+            feedbackMail: email
+        )
+    }
+
+    func createRequestFrom(_ feedback: Feedback) -> URLRequest? {
+        guard let url = URL(string: webhook) else { return nil }
+        guard let payload = try? JSONEncoder().encode(feedback) else { return nil }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = payload
+
+        return request
+    }
+}
+
+
+/// Default Slack Configuration
+public struct SlackConfiguration: SlackConfigurationProtocol {
+    
+    public var webhook: String
+    public var composer: MessageComposable
+
+    public init(webhook: String, composer: MessageComposable = MessageComposer()) {
+        self.webhook = webhook
+        self.composer = composer
+    }
+}
