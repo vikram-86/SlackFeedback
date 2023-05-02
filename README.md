@@ -7,7 +7,7 @@ The SlackFeedback Framework is a Swift package that makes it easy for iOS app us
 You can easily install SlackFeedback using Swift Package Manager. Follow these steps to add it to your Xcode project:
 
 1. Open your Xcode project and navigate to File -> Swift Packages -> Add Package Dependency...
-2. In the search bar, enter `https://github.com/{YOUR_GITHUB_USERNAME}/SlackFeedback` (replace `{YOUR_GITHUB_USERNAME}` with your actual GitHub username).
+2. In the search bar, enter `https://github.com/vikram-86/SlackFeedback`.
 3. Select the latest version of the package and click Next.
 4. Select the target where you want to use the framework and click Finish.
 
@@ -42,6 +42,24 @@ To send feedback from your app to Slack, use the `sendFeedback` function:
 let feedback = "I found a bug in the app!"
 slackFeedback.sendFeedback(feedback: feedback)
 ```
+
+## Result in Slack
+
+The result of the feedback sent using SlackFeedback will appear in your designated Slack channel as a message with the following format:
+For example:
+
+![SlackFeedback Result](Skjermbilde 2023-05-02 kl. 11.47.51)
+
+## Demo App
+
+For a sample implementation of SlackFeedback, check out our demo app. The demo app demonstrates how to use SlackFeedback to send feedback to a Slack channel.
+
+To run the demo app, follow these steps:
+
+1. Clone the repository.
+2. Open the `SlackFeedbackDemo.xcodeproj` file in Xcode.
+3. Build and run the app on a simulator or device.
+4. Enter your Webhook URL and send feedback.
 
 ## Contributing
 
