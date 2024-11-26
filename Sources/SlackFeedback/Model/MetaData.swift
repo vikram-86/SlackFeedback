@@ -1,27 +1,36 @@
-//
-//  File.swift
-//  
-//
-//  Created by Vikram on 28/04/2023.
-//
-
 import UIKit
 
-internal let OS = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
-internal let name = UIDevice.modelName
-
-/// Contains meta data for info headers such as osVersion
-/// device name and appversion.
-/// the **default** value of metadata
-/// gets the osVersion and device name automatically
+/// Provides metadata for informational headers, such as OS version, device name, and app version.
+///
+/// The `MetaData` structure allows for automatic population of the operating system version
+/// and device name using default values, while also supporting customization.
+///
+/// Example usage:
+/// ```swift
+/// let metaData = MetaData.default
+/// print(metaData.osVersion) // e.g., "iOS 17.0"
+/// print(metaData.deviceName) // e.g., "iPhone 16 Pro"
+/// ```
 public struct MetaData {
-    let osVersion: String
-    let deviceName: String
-    let appVersion: String?
 
-    init(
-        osVersion: String = OS,
-        deviceName: String = name,
+    /// The version of the operating system, e.g., "iOS 17.0".
+    public let osVersion: String
+
+    /// The name of the device, e.g., "iPhone 16 Pro".
+    public let deviceName: String
+
+    /// The version of the app, if available.
+    public let appVersion: String?
+
+    /// Initializes a new instance of `MetaData`.
+    ///
+    /// - Parameters:
+    ///   - osVersion: The operating system version. Defaults to the current device's OS version.
+    ///   - deviceName: The name of the device. Defaults to the current device's model name.
+    ///   - appVersion: The version of the app. Defaults to `nil`.
+    public init(
+        osVersion: String = "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)",
+        deviceName: String = UIDevice.modelName,
         appVersion: String? = nil
     ) {
         self.osVersion = osVersion
@@ -29,8 +38,13 @@ public struct MetaData {
         self.appVersion = appVersion
     }
 
-    /// default value gets the osVersion(iOS 16 etc)
-    /// and deviceName(iphone 14 Pro) automatically
+    /// The default metadata instance.
+    ///
+    /// This value automatically populates the operating system version and device name.
+    /// Example:
+    /// ```swift
+    /// let defaultMetaData = MetaData.default
+    /// ```
     public static var `default`: MetaData {
         MetaData()
     }
